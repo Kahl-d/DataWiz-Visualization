@@ -1,0 +1,63 @@
+#mapComparisonComponent {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #mapComparisonOperator {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f0f0f0;
+  }
+  
+  #selectedAttributes {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .selectedAttribute {
+    background-color: #e0e0e0;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .selectedAttribute button {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  #attributeList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+  }
+  
+  #attributeList li {
+    background-color: #e0e0e0;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: grab;
+  }
+  
+  #mapComparisonMaps {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .mapContainer {
+    flex: 1;
+    height: 500px;
+    position: relative;
+  }
+  
+  .mapTitle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  

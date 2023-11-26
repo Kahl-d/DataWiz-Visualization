@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#appContainer{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    background-color: #84A9C0;
+    color: white;
+
+}
+
+.appContainers{
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.bridgeImg{
+    width: 60%;
+    
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+}
+
+.welcomeText{
+    position: absolute;
+    padding: 1rem;
+    
+}
+
+#wt1{
+    font-size: 8rem;
+    font-weight: 700;
+    /* color: #000; */
+    
+    top: 10rem;
+}
+
+#wt2{
+    font-size: 8rem;
+    font-weight: 700;
+    /* color: #000;  */
+    top: 18rem;
+}
+
+.sectionTitle{
+
+    font-size: 3rem;
+}

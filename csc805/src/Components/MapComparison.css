@@ -1,0 +1,38 @@
+/* MapComparison.css */
+.mapContainer {
+    height: 300px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+  }
+  
+  .mapTitle {
+    text-align: center;
+    padding: 10px;
+    background-color: #f5f5f5;
+  }
+  
+  .availableAttributes {
+    border: 1px solid #ddd;
+    padding: 8px;
+    margin-bottom: 8px;
+    cursor: grab;
+    transition: background-color 0.3s;
+  }
+  
+  .availableAttributes:hover {
+    background-color: #f0f0f0;
+  }
+
+  #mapComparisonComponent{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+ }
+
+ #mapComparisonMaps{
+  flex-grow: 1;
+ }
+  
+ .mapContainer{
+  height: 100%;
+ }
