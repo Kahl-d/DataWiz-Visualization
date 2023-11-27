@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { Select, MenuItem, FormControl, InputLabel, Box, Typography, Grid } from "@mui/material";
 
-const Timeseries = () => {
+const Timeseries = ({ name }) => {
   const ref = useRef();
+  const legendContainerRef = useRef();
   const [selectedYear, setSelectedYear] = useState(null);
   const [allYears, setAllYears] = useState([]);
   const [processedData, setProcessedData] = useState({});
@@ -11,7 +12,7 @@ const Timeseries = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const csvData = await d3.csv('1bed.csv'); // Replace with your file path
+      const csvData = await d3.csv(name);
       const sanFranciscoData = csvData.filter(entry => entry.City === 'San Francisco');
 
       const dataByRegion = sanFranciscoData.reduce((acc, entry) => {
@@ -42,7 +43,9 @@ const Timeseries = () => {
                          .sort();
 
       setAllYears(years);
-      setSelectedYear(years[0]);
+      if (years.length > 0) {
+        setSelectedYear(years[0]);
+      }
       setProcessedData(dataByRegion);
 
       const regions = new Set(sanFranciscoData.map(entry => entry.RegionName));
@@ -50,7 +53,7 @@ const Timeseries = () => {
     };
 
     fetchData();
-  }, []);
+  }, [name]);
 
   useEffect(() => {
     if (selectedYear && processedData) {
@@ -125,55 +128,57 @@ const Timeseries = () => {
         .attr("text-anchor", "middle")
         .text(d => d3.timeFormat("%b")(d));
 
+    const axisColor = 'white';
     const numTicks = 5;
     svg.selectAll(".radial-axis")
-      .data(radialScale.ticks(numTicks))
-      .enter().append("circle")
-        .attr("class", "radial-axis")
-        .attr("cx", 0)
-        .attr("cy", 0)
-        .attr("r", d => radialScale(d))
-        .style("fill", "none")
-        .style("stroke", "#888")
-        .style("stroke-dasharray", "2,2");
+    .data(radialScale.ticks(numTicks))
+    .enter().append("circle")
+      .attr("class", "radial-axis")
+      .attr("cx", 0)
+      .attr("cy", 0)
+      .attr("r", d => radialScale(d))
+      .style("fill", "none")
+      .style("stroke", axisColor) // Set the stroke color to white
+      .style("stroke-dasharray", "2,2");
 
-    svg.selectAll(".radial-axis-label")
-      .data(radialScale.ticks(numTicks))
-      .enter().append("text")
-        .attr("class", "radial-axis-label")
-        .attr("x", 0)
-        .attr("y", d => -radialScale(d))
-        .attr("dy", "-0.4em")
-        .attr("text-anchor", "middle")
-        .text(d => `$${d3.format(",")(d)}`);
+        svg.selectAll(".radial-axis-label")
+        .data(radialScale.ticks(numTicks))
+        .enter().append("text")
+          .attr("class", "radial-axis-label")
+          .attr("x", 0)
+          .attr("y", d => -radialScale(d))
+          .attr("dy", "-0.4em")
+          .attr("text-anchor", "middle")
+          .style("fill", axisColor) // Set the fill color to white
+          .text(d => `$${d3.format(",")(d)}`);
 
-    const legendContainer = d3.select('.legend-container').html('');
+        const legendContainer = d3.select(legendContainerRef.current).html('');
 
-    uniqueRegions.forEach((region, i) => {
-      const legendItem = legendContainer.append('div')
-        .style('display', 'flex')
-        .style('align-items', 'center')
-        .style('margin-right', '10px')
-        .style('margin-bottom', '5px');
-
-      legendItem.append('div')
-        .style('width', '15px')
-        .style('height', '15px')
-        .style('background-color', colorScale(i))
-        .style('margin-right', '5px');
-
-      legendItem.append('text')
-        .style('font-size', '0.8em')
-        .text(region);
-    });
-  };
+        uniqueRegions.forEach((region, i) => {
+          const legendItem = legendContainer.append('div')
+            .style('display', 'flex')
+            .style('align-items', 'center')
+            .style('margin-right', '10px')
+            .style('margin-bottom', '10px'); // Adjusted margin-bottom for spacing
+    
+          legendItem.append('div')
+            .style('width', '15px')
+            .style('height', '15px')
+            .style('background-color', colorScale(i))
+            .style('margin-right', '5px');
+    
+          legendItem.append('text')
+            .style('font-size', '0.8em')
+            .text(region);
+        });
+      };
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={4}>
         <Box sx={{ padding: 2 }}>
           <Typography variant="h6">Select Year</Typography>
-          <FormControl fullWidth>
+          <FormControl>
             <InputLabel id="year-select-label">Year</InputLabel>
             <Select
               labelId="year-select-label"
@@ -186,7 +191,7 @@ const Timeseries = () => {
                 <MenuItem key={year} value={year}>{year}</MenuItem>
               ))}
             </Select>
-            <div className="legend-container" style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap' }} />
+            <div className="legend-container" ref={legendContainerRef} style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap' }} />
           </FormControl>
         </Box>
       </Grid>

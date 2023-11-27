@@ -1,64 +1,40 @@
-import React, { useState, useEffect, useRef } from "react";
-import * as d3 from "d3";
+import React, { useState } from "react";
+import Timeseries from "./Timeseries";
+import { Select, MenuItem, FormControl } from "@mui/material";
 
 
 const TimeComponent = () => {
+  const fileNames = ['1bed.csv', '2bed.csv', '3bed.csv', '4bed.csv', '5bed.csv', 'singlefamily.csv', 'condo.csv'];
+  
+  // Mapping between file names and user-friendly names
+  const fileNameMapping = {
+    '1bed.csv': '1 Bedroom Units',
+    '2bed.csv': '2 Bedroom Units',
+    '3bed.csv': '3 Bedroom Units',
+    '4bed.csv': '4 Bedroom Units',
+    '5bed.csv': '5 Bedroom Units',
+    'singlefamily.csv': 'Single Family Units',
+    'condo.csv': 'Condo Units',
+  };
 
-    const ref = useRef();
-    const [fileName, setFileName] = useState('1bed.csv');
-    const [selectedYear, setSelectedYear] = useState(null);
-    const [allYears, setAllYears] = useState([]);
-    const [processedData, setProcessedData] = useState({});
-    const [uniqueRegions, setUniqueRegions] = useState([]);
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        const csvData = await d3.csv('1bed.csv'); // Replace with your file path
-        const sanFranciscoData = csvData.filter(entry => entry.City === 'San Francisco');
-  
-        const dataByRegion = sanFranciscoData.reduce((acc, entry) => {
-          const regionName = entry.RegionName;
-          if (!acc[regionName]) {
-            acc[regionName] = {};
-          }
-  
-          Object.keys(entry).forEach(key => {
-            if (key.includes('-')) {
-              const year = key.substring(0, 4);
-              if (!acc[regionName][year]) {
-                acc[regionName][year] = [];
-              }
-              acc[regionName][year].push({
-                date: d3.timeParse("%Y-%m-%d")(key),
-                value: +entry[key] || 0,
-                regionName
-              });
-            }
-          });
-  
-          return acc;
-        }, {});
-  
-        const years = Array.from(new Set(Object.keys(dataByRegion)
-                                         .flatMap(region => Object.keys(dataByRegion[region]))))
-                           .sort();
-  
-        setAllYears(years);
-        setSelectedYear(years[0]);
-        setProcessedData(dataByRegion);
-  
-        const regions = new Set(sanFranciscoData.map(entry => entry.RegionName));
-        setUniqueRegions(Array.from(regions));
-      };
-  
-      fetchData();
-    }, []);
+  const [fileName, setFileName] = useState('1bed.csv');
 
-    return (
-        <div>
-        <h1>TimeComponent</h1>
-        </div>
-    );
-    }
+  return (
+    <div>
+      <div>Type of Housing:</div>
+      <FormControl >
+        <Select
+          value={fileName}
+          onChange={e => setFileName(e.target.value)}
+        >
+          {fileNames.map(file => (
+            <MenuItem key={file} value={file}>{fileNameMapping[file]}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Timeseries name={fileName} />
+    </div>
+  );
+};
 
 export default TimeComponent;

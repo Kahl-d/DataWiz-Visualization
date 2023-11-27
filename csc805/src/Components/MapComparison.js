@@ -16,8 +16,6 @@ const MapComparison = (props) => {
     return +value.replace(/,/g, '');
   };
 
-  // ... (Continued in Part 2)
-  // ... (Continued from Part 1)
 
   const handleAttributeDragStart = (e, attribute) => {
     e.dataTransfer.setData('text/plain', attribute);
@@ -71,21 +69,7 @@ const MapComparison = (props) => {
     }
   };
 
-  const handleColorChange = (event) => {
-    setMapColor(event.target.value);
-    // Update maps with the selected color
-    if (selectedAttributes.length > 0) {
-      updateMapStyle(map1Ref.current, selectedAttributes[0], 1);
-      if (selectedAttributes.length > 1) {
-        updateMapStyle(map2Ref.current, selectedAttributes[1], 2);
-      }
-    }
-  };
 
-  // ... (Continued in Part 3)
-
-
-    // ... (Continued from Part 2)
 
     const updateMapStyle = (mapRef, attribute, mapNumber) => {
         if (!mapRef || !props.geoData || !props.csvData) {
@@ -201,7 +185,7 @@ const MapComparison = (props) => {
           <div id='mapComparisonOperator'>
             <div id='selectedAttributes'>
               {selectedAttributes.map((attribute) => (
-                <div key={attribute} className='selectedAttribute'>
+                <div key={attribute} className='item1'>
                   {attribute}
                   <Button variant="contained" color="error" onClick={() => handleAttributeRemove(attribute)}>Remove</Button>
                 </div>
@@ -210,9 +194,9 @@ const MapComparison = (props) => {
             <div id='attributeList'>
               <Typography variant="h6">Attribute List:</Typography>
               {availableAttributes.length > 0 && (
-                <ul>
+                <div id='innerAttributeList'>
                   {availableAttributes.map(attribute => (
-                    <li
+                    <div className='item'
                       key={attribute}
                       draggable
                       onDragStart={(e) => handleAttributeDragStart(e, attribute)}
@@ -220,22 +204,12 @@ const MapComparison = (props) => {
                       onDrop={(e) => handleAttributeDrop(e, 1)}
                     >
                       {attribute}
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               )}
             </div>
-            <div id='colorPicker'>
-              <Typography variant="h6">Map Color:</Typography>
-              <FormControl variant="outlined">
-                <Select value={mapColor} onChange={handleColorChange}>
-                  <MenuItem value='lightblue'>Light Blue</MenuItem>
-                  <MenuItem value='lightgreen'>Light Green</MenuItem>
-                  <MenuItem value='lightcoral'>Light Coral</MenuItem>
-                  {/* Add more color options as needed */}
-                </Select>
-              </FormControl>
-            </div>
+
           </div>
           
           <div id='mapComparisonMaps'>

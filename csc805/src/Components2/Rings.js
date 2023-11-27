@@ -5,13 +5,13 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import './rings.css';
 
 const Rings = () => {
   const [groupedData, setGroupedData] = useState({});
   const [crimeTypes, setCrimeTypes] = useState([]);
   const [selectedCrimeType, setSelectedCrimeType] = useState('');
   const [chartData, setChartData] = useState([]);
-  const [totalCrimeData, setTotalCrimeData] = useState([]);
 
   useEffect(() => {
     // Function to fetch and process data
@@ -38,7 +38,6 @@ const Rings = () => {
           newData[region][year][type] = [];
         }
 
-        // Include relevant information about each incident
         newData[region][year][type].push({
           'Incident ID': entry['Incident ID'],
         });
@@ -125,11 +124,11 @@ const Rings = () => {
   }, [chartData, selectedCrimeType]);
 
   return (
-    <div>
-      <h1>Rings</h1>
+    <div id='ringsContainer'>
 
-      <FormControl style={{ minWidth: 200 }}>
-        <InputLabel id="crime-type-label">Crime Type</InputLabel>
+
+      <FormControl style={{ minWidth: 200, backgroundColor: 'white' }}>
+        <InputLabel id="crime-type-label" style={{ color: 'black' }}>Crime Type</InputLabel>
         <Select
           labelId="crime-type-label"
           id="crime-type-select"
@@ -144,7 +143,8 @@ const Rings = () => {
         </Select>
       </FormControl>
 
-      <ResponsiveContainer width="80%" height={400}>
+
+      <ResponsiveContainer width="100%" height={400}>
         <LineChart
           data={chartData}
           margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
